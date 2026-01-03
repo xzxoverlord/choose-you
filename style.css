@@ -1,0 +1,311 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Poppins", sans-serif;
+  background: #fafafa;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+  padding: 40px 20px;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 60px;
+}
+
+.subtitle {
+  color: #ff6b35;
+  font-size: 14px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 16px;
+}
+
+.main-title {
+  font-size: clamp(36px, 5vw, 56px);
+  font-weight: 900;
+  color: #0a0a0a;
+  line-height: 1.1;
+}
+
+.slider-container {
+  perspective: 1500px;
+  perspective-origin: 50% 50%;
+  cursor: grab;
+  width: 100%;
+  max-width: 1400px;
+  overflow: hidden;
+}
+
+.slider-container.dragging {
+  cursor: grabbing;
+}
+
+.slider-track {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transform-style: preserve-3d;
+}
+
+.card {
+  flex-shrink: 0;
+  width: 240px;
+  background: white;
+  overflow: hidden;
+  transform-style: preserve-3d;
+  position: relative;
+  cursor: pointer;
+}
+
+.card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    to right,
+    rgba(0, 0, 0, 0.15),
+    transparent 30%,
+    transparent 70%,
+    rgba(0, 0, 0, 0.15)
+  );
+  transform: translateZ(-8px);
+  pointer-events: none;
+}
+
+.card::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #e0e0e0;
+  transform: translateZ(-16px);
+  box-shadow: 0 0 40px rgba(0, 0, 0, 0.3);
+  pointer-events: none;
+}
+
+.card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  pointer-events: none;
+  position: relative;
+  z-index: 1;
+}
+
+.card .hover-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 2;
+}
+
+.card:hover .hover-overlay {
+  opacity: 1;
+}
+
+.card .hover-overlay span {
+  color: white;
+  font-size: 16px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.slider-track.blurred .card:not(.expanded) {
+  filter: blur(8px);
+  transition: filter 0.6s ease;
+}
+
+.card.expanded {
+  z-index: 1000 !important;
+}
+
+.card-info {
+  position: fixed;
+  bottom: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.6s ease;
+  z-index: 1001;
+  max-width: 600px;
+  padding: 1.5rem;
+  background: #ff6b35;
+  box-shadow: 4px 3px 18px 4px #b7b7b721;
+  min-width: 375px;
+}
+
+.card-info.visible {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.card-info h2 {
+  font-size: 36px;
+  font-weight: 900;
+  color: #0a0a0a;
+  margin-bottom: 16px;
+}
+
+.card-info p {
+  font-size: 18px;
+  color: #080808;
+  line-height: 1.7;
+}
+
+.close-btn {
+  position: fixed;
+  top: 40px;
+  right: 40px;
+  width: 60px;
+  height: 60px;
+  background: white;
+  border: none;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 1002;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.3s ease;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+}
+
+.close-btn.visible {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.close-btn:hover {
+  background: #ff6b35;
+  color: white;
+  transform: rotate(90deg) scale(1.1);
+}
+
+.close-btn svg {
+  width: 24px;
+  height: 24px;
+}
+
+
+@media (max-width: 768px) {
+  body {
+    padding: 24px 12px;
+    justify-content: flex-start;
+  }
+
+  .header {
+    margin-bottom: 32px;
+  }
+
+  .subtitle {
+    font-size: 12px;
+    letter-spacing: 1.5px;
+  }
+
+  .main-title {
+    font-size: 32px;
+    line-height: 1.2;
+  }
+
+  /* Slider */
+  .slider-container {
+    max-width: 100%;
+    perspective: 1000px;
+  }
+
+  .slider-track {
+    gap: 12px;
+  }
+
+  /* Card lớn hơn để dễ chạm */
+  .card {
+    width: 70vw;
+    max-width: 280px;
+    left: 0;
+  }
+
+  /* Hover không cần trên mobile */
+  .card .hover-overlay {
+    opacity: 1;
+    background: linear-gradient(
+      to top,
+      rgba(0, 0, 0, 0.65),
+      rgba(0, 0, 0, 0.1)
+    );
+  }
+
+  .card .hover-overlay span {
+    font-size: 14px;
+    position: absolute;
+    bottom: 16px;
+  }
+
+  /* Card info */
+  .card-info {
+    bottom: 16px;          /* ↓ từ 80px xuống */
+    padding: 14px 16px;
+    border-radius: 14px;
+  }
+
+ .card-info h2 {
+    font-size: 22px;
+    margin-bottom: 8px;
+  }
+
+  .card-info p {
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  /* Nút đóng dễ bấm */
+   .close-btn {
+    top: 12px;
+    right: 12px;
+    width: 44px;
+    height: 44px;
+  }
+
+  .close-btn svg {
+    width: 20px;
+    height: 20px;
+  }
+
+
+  .card.clone {
+    position: fixed !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+  }
+}
+
